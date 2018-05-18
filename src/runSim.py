@@ -43,7 +43,7 @@ def run_game():
 
         # circlePosY = round(circlePosY + (t2 - t1) * velocity)
         dt = t2 - t1
-        ## rebond
+        ## rebound
         if circlePosY + radius > ai_settings.resolution[1]:
             ds1 = ai_settings.resolution[1] - circlePosY- radius
             dt1 = math.sqrt((velocity/g)**2 + 2*ds1/g) - velocity/g 
@@ -51,7 +51,7 @@ def run_game():
             circlePosY = ai_settings.resolution[1] - radius
             dt -= dt1
 
-    
+
         circlePosY = circlePosY + velocity*dt + 1/2*g*dt**2
         velocity = velocity + g * dt
         surface1.fill(ai_settings.bg_color) # fill color
