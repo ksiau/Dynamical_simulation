@@ -22,8 +22,8 @@ def run_game():
     circlePosY = 300
     t1 = time.time() # 
     t2 = t1
-    velocity = 0
-    radius = 40
+    # velocity = 0
+    # radius = 100
     ball0 = ball.Ball(40, [600, 0], [300, 900], [0, 0, 255])
     ball1 = ball.Ball(40, [-1000, 0], [600, 300], [0, 255, 0])
     ball2 = ball.Ball(40, [1500, -3000], [900, 600], [255, 0, 0])
