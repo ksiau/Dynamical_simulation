@@ -5,12 +5,6 @@ import time, math
 import ball
 
 from settings import Settings
-# from rectangle import Rectangle
-# from game_stats import game_statsts
-# from scoreboard import Scoreboard
-# from button import Button
-# from circle import Circle
-# import game_functions as gf
 
 
 def run_game():
@@ -20,8 +14,6 @@ def run_game():
     screen = pygame.display.set_mode(ai_settings.display)
     surface1 = pygame.Surface(ai_settings.resolution)
     pygame.display.set_caption("Dynamics simulation")
-    # rect = Rectangle(ai_settings,screen)
-    # pygame.draw.rect(screen, (0,0,255), (100, 200, 100, 100))
     # font = pygame.font.Font(None, 36)
     # text = font.render("Now create your world", 1, (10, 10, 10))
     # textpos = text.get_rect(centerx=screen.get_width()/2)
@@ -34,12 +26,12 @@ def run_game():
     radius = 40
     ball0 = ball.Ball(40, [600, 0], [300, 900], [0, 0, 255])
     ball1 = ball.Ball(40, [-1000, 0], [600, 300], [0, 255, 0])
-    ball2 = ball.Ball(40, [1500, -300], [900, 600], [255, 0, 0])
+    ball2 = ball.Ball(40, [1500, -3000], [900, 600], [255, 0, 0])
     while True:
         # clock.tick(30)
         # supervise keyboard and mouse item
         # print(t2,velocity)
-        # tic = time.time() 
+        # tic = time.time()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -63,7 +55,7 @@ def run_game():
         # screen.blit(surface2, ( (screen.get_size()[0] - surface2.get_size()[0])/2,
         #                         (screen.get_size()[1] - surface2.get_size()[1])/2)) # Blit main surface on center of display
         pygame.display.flip()
-        print(g*(ai_settings.resolution[1] - ball0.location[1]) + 1/2*ball0.velocity[1]**2) 
+        # print(g*(ai_settings.resolution[1] - ball0.location[1]) + 1/2*ball0.velocity[1]**2) 
         # toc = time.time() 
         # print((t2 - t1), toc - tic)
 
