@@ -13,6 +13,51 @@ from settings import Settings
 # import game_functions as gf
 
 
+def impact(ball1, ball2, dt):
+    v1  = (ball1.location[0] - ball2.location[0], ball1.location[1] - ball2.location[1])
+    v2 = (ball1.velocity[0] - ball2.velocity[0], ball1.velocity[1] - ball2.velocity[1])
+    dis = math.sqrt(v1[0]**2 + v1[1]**2)
+    velocity = math.sqrt(v2[0]**2 + v2[1]**2)
+    cs = (v1[0]*v2[0] + v1[1]*v2[1])/dis/velocity
+    # print(cs)
+    if cs >= 0: return 0
+    error = 0.0001
+    # print(math.sqrt(1 - (cs + error)**2)*dis)
+    if math.sqrt(1 - (cs + error)**2)*dis - ball1.radius - ball2.radius > 0: return 0
+    dt1 = (dis - ball1.radius - ball2.radius)*-cs/velocity
+    # print(1)
+    # print(dis, cs, velocity, dt1)
+    if dt1 > dt:
+        return 0
+    ball1.location[0] += ball1.velocity[0]*dt
+    ball1.location[1] += ball1.velocity[1]*dt
+    ball2.location[0] += ball2.velocity[0]*dt
+    ball2.location[1] += ball2.velocity[1]*dt
+    dt2 = dt - dt1
+    v1  = (ball1.location[0] - ball2.location[0], ball1.location[1] - ball2.location[1])
+    dis = math.sqrt(v1[0]**2 + v1[1]**2)
+    # print(dis, ball1.radius + ball2.radius)
+    dvscale = (v1[0]*v2[0] + v1[1]*v2[1])/dis
+    dv = (-dvscale*v1[0]/dis, -dvscale*v1[1]/dis)
+    ball1.velocity[0] += dv[0]
+    ball1.velocity[1] += dv[1]
+    ball2.velocity[0] -= dv[0]
+    ball2.velocity[1] -= dv[1]
+    ball1.velocity[0] += ball1.velocity[0]*dt2
+    ball1.location[1] += ball1.velocity[1]*dt2
+    ball2.location[0] += ball2.velocity[0]*dt2
+    ball2.location[1] += ball2.velocity[1]*dt2
+    # print(ball2.velocity)
+    # print(v2, dvscale, dv)
+
+    return 1
+
+
+
+
+
+
+
 def run_game():
     # Initialize pygame, settings, and screen object.
     pygame.init()
@@ -25,17 +70,13 @@ def run_game():
     # font = pygame.font.Font(None, 36)
     # text = font.render("Now create your world", 1, (10, 10, 10))
     # textpos = text.get_rect(centerx=screen.get_width()/2)
-    # g =  [1000, 5000] # 加速度
-    G = 9.8
+    g =  [0, 0] # 加速度
     updateTime = 0.001
     # clock = pygame.time.Clock()
     t1 = time.time() # 
     t2 = t1
-    ball0 = ball.Ball(40, [0, 0], [800, ai_settings.resolution[1]/2], [0, 0, 255])
-    ball2 = ball.Ball(40, [0, 200], [800, ai_settings.resolution[1]/2], [0, 255, 0])
-    ball1 = ball.Ball(100, [0, 0], [ai_settings.resolution[0]/2, ai_settings.resolution[1]/2], [0, 255, 0], 5000000)
-    ball0.getGravityEnergy([ball1,], G)
-    ball2.getGravityEnergy([ball1,], G)
+    ball0 = ball.Ball(40, [-100, 0], [600, 600], [0, 255, 0])
+    ball1 = ball.Ball(40, [ 100, 0], [300, 640], [0, 0, 255])
     while True:
         # clock.tick(30)
         # supervise keyboard and mouse item
@@ -46,17 +87,19 @@ def run_game():
                 sys.exit()
 
         # circlePosY = round(circlePosY + (t2 - t1) * velocity)
-        t2 = time.time()
+        t2 = time.time()       
         surface1.fill(ai_settings.bg_color) # fill color
-        # dis = math.sqrt((ball0.location[0] - ball1.location[0])**2 + (ball0.location[1] - ball1.location[1])**2)
-        # gscale = G*ball0.mass*ball1.mass/dis**2
-        # g1 = [gscale*(ball1.location[0] - ball0.location[0])/dis, gscale*(ball1.location[1] - ball0.location[1])/dis]
-        # print(g1)
 
         while t2 - t1 > updateTime:
-            ball0.updateGravity(surface1, updateTime, [ball1,], G)
-            ball2.updateGravity(surface1, updateTime, [ball1,], G)
-            ball1.update(surface1, (0, 0), updateTime)
+            isImpact = impact(ball0, ball1, updateTime)
+            # print(isImpact)
+            if not isImpact:
+                ball1.update(surface1, g, updateTime)
+                ball0.update(surface1, g, updateTime)
+            else:
+                ball1.update(surface1, g, 0)
+                ball0.update(surface1, g, 0)
+
             t1 += updateTime
         # velocity = velocity + g * (t2 - t1)
         # print(pygame.TIMER_RESOLUTION)
