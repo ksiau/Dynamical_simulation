@@ -12,7 +12,6 @@ class Ball():
     def update(self, surface, g, dt):
         sizex, sizey = surface.get_size()
         dty = dt
-<<<<<<< HEAD
         ds = self.velocity[1]*dty + 1/2*g*dty**2
         # 碰下壁
         if self.location[1] + self.radius + ds > sizey:
@@ -47,7 +46,7 @@ class Ball():
             dt -= dt1
             self.velocity[0] = -self.velocity[0]
             ds = self.velocity[0]*dt
-=======
+
         ds = self.velocity[1]*dty + 1/2*g[1]*dty**2
         while self.location[1] + self.radius + ds > sizey or self.location[1] - self.radius + ds < 0:
             if self.location[1] + self.radius + ds > sizey:
@@ -82,7 +81,7 @@ class Ball():
         self.location[1] = self.location[1] + ds
         self.velocity[1] = self.velocity[1] + g[1] * dty
 
->>>>>>> hyl_temp
+
 
         dtx = dt
         ds = self.velocity[0]*dtx + 1/2*g[0]*dtx**2
