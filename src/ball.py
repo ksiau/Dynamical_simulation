@@ -12,6 +12,7 @@ class Ball():
     def update(self, surface, g, dt):
         sizex, sizey = surface.get_size()
         dty = dt
+<<<<<<< HEAD
         ds = self.velocity[1]*dty + 1/2*g*dty**2
         # 碰下壁
         if self.location[1] + self.radius + ds > sizey:
@@ -83,6 +84,43 @@ class Ball():
 
 
 
+=======
+        ds = self.velocity[1]*dty + 1/2*g[1]*dty**2
+        while self.location[1] + self.radius + ds > sizey or self.location[1] - self.radius + ds < 0:
+            if self.location[1] + self.radius + ds > sizey:
+                ds1 = sizey - self.location[1] - self.radius
+                if g[1] == 0:
+                    dt1 = (sizey - self.location[1] - self.radius)/self.velocity[1]
+                else:
+                    dt1Tmp = math.sqrt((self.velocity[1]/g[1])**2 + 2*ds1/g[1]) - self.velocity[1]/g[1]
+                    if dt1Tmp >= 0 and dt1Tmp < dty:
+                        dt1 = dt1Tmp
+                    else:
+                        dt1 = - math.sqrt((self.velocity[1]/g[1])**2 + 2*ds1/g[1]) - self.velocity[1]/g[1]
+                self.velocity[1] = -(self.velocity[1] + g[1]*dt1)
+                self.location[1] = sizey - self.radius
+                dty -= dt1
+                ds = self.velocity[1]*dty + 1/2*g[1]*dty**2
+            elif self.location[1] - self.radius + ds < 0:
+                ds1 = - (self.location[1] - self.radius)
+                if g[1] == 0:
+                    dt1 = (self.location[1] - self.radius)/self.velocity[1]
+                else:
+                    dt1Tmp = math.sqrt((self.velocity[1]/g[1])**2 + 2*ds1/g[1]) - self.velocity[1]/g[1]
+                    if dt1Tmp >= 0 and dt1Tmp < dty:
+                        dt1 =  dt1Tmp
+                    else:
+                        dt1 = - math.sqrt((self.velocity[1]/g[1])**2 + 2*ds1/g[1]) - self.velocity[1]/g[1]
+                self.velocity[1] = -(self.velocity[1] + g[1]*dt1)
+                self.location[1] = self.radius
+                dty -= dt1
+                ds = self.velocity[1]*dty + 1/2*g[1]*dty**2
+
+        self.location[1] = self.location[1] + ds
+        self.velocity[1] = self.velocity[1] + g[1] * dty
+
+
+>>>>>>> f37e6f5fe29d9914972beac83f916e1709ebb173
         dtx = dt
         ds = self.velocity[0]*dtx + 1/2*g[0]*dtx**2
         while (self.location[0] + self.radius + ds > sizex) or (self.location[0] - self.radius + ds < 0):
@@ -123,6 +161,17 @@ class Ball():
         location = [round(self.location[0]), round(self.location[1])]
         pygame.draw.circle(surface, self.color, location, self.radius)
 
+<<<<<<< HEAD
+
+    def getGravityEnergy(self, masses, G):
+        energy = 1/2*self.mass*(self.velocity[0]**2 + self.velocity[1]**2)
+        for mass in masses:
+            dis = math.sqrt((self.location[0] - mass.location[0])**2 + (self.location[1] - mass.location[1])**2)
+            energy += -G*self.mass*mass.mass/dis
+        self.energy = energy
+
+=======
+>>>>>>> f37e6f5fe29d9914972beac83f916e1709ebb173
 
     def getGravityEnergy(self, masses, G):
         energy = 1/2*self.mass*(self.velocity[0]**2 + self.velocity[1]**2)
@@ -138,6 +187,14 @@ class Ball():
         dty = dt
         g = [0, 0]
 
+<<<<<<< HEAD
+    def updateGravity(self, surface, dt, masses, G):
+        sizex, sizey = surface.get_size()
+        dty = dt
+        g = [0, 0]
+
+=======
+>>>>>>> f37e6f5fe29d9914972beac83f916e1709ebb173
         for mass in masses:
             dis = math.sqrt((self.location[0] - mass.location[0])**2 + (self.location[1] - mass.location[1])**2)
             gscale = G*self.mass*mass.mass/dis**2
