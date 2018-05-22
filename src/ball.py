@@ -1,4 +1,5 @@
 import pygame, math
+
 class Ball():
 
     def __init__(self, radius, velocity, location, color, mass=1):
