@@ -7,6 +7,8 @@ import ball
 from settings import Settings
 
 
+
+
 def run_game():
     # Initialize pygame, settings, and screen object.
     pygame.init()
@@ -17,32 +19,18 @@ def run_game():
     # font = pygame.font.Font(None, 36)
     # text = font.render("Now create your world", 1, (10, 10, 10))
     # textpos = text.get_rect(centerx=screen.get_width()/2)
-<<<<<<< HEAD
     g =  [0, 5000] # 加速度
     # clock = pygame.time.Clock()
     t1 = time.time() # 
     t2 = t1
-    # velocity = 0
-    # radius = 100
-    ball0 = ball.Ball(40, [600, 0], [300, 900], [0, 0, 255])
-    ball1 = ball.Ball(40, [-1000, 0], [600, 300], [0, 255, 0])
-    ball2 = ball.Ball(40, [1500, -3000], [900, 600], [255, 0, 0])
     ball0 = ball.Ball(400, [600, -1500], [300, 900], [0, 0, 255])
     ball1 = ball.Ball(40, [-1000, 0], [600, 300], [0, 255, 0])
-=======
-    g =  [1000, 5000] # 加速度
-    # clock = pygame.time.Clock()
-    t1 = time.time() # 
-    t2 = t1
-    ball0 = ball.Ball(40, [600, -1500], [300, 900], [0, 0, 255])
-    ball1 = ball.Ball(40, [-1000, 0], [600, 300], [0, 255, 0])
->>>>>>> f37e6f5fe29d9914972beac83f916e1709ebb173
     ball2 = ball.Ball(40, [1500, -2500], [900, 600], [255, 0, 0])
     while True:
         # clock.tick(30)
         # supervise keyboard and mouse item
         # print(t2,velocity)
-        # tic = time.time()
+        # tic = time.time() 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -64,10 +52,6 @@ def run_game():
         # screen.blit(surface2, ( (screen.get_size()[0] - surface2.get_size()[0])/2,
         #                         (screen.get_size()[1] - surface2.get_size()[1])/2)) # Blit main surface on center of display
         pygame.display.flip()
-<<<<<<< HEAD
-        # print(g*(ai_settings.resolution[1] - ball0.location[1]) + 1/2*ball0.velocity[1]**2) 
-=======
->>>>>>> f37e6f5fe29d9914972beac83f916e1709ebb173
         # print(g[1]*(ai_settings.resolution[1] - ball0.location[1]) + g[0]*(ai_settings.resolution[0] - ball0.location[0]) + 1/2*ball0.velocity[1]**2) 
         # toc = time.time() 
         # print((t2 - t1), toc - tic)
