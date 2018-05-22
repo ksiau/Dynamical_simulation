@@ -19,11 +19,11 @@ class Ball():
                 if g[1] == 0:
                     dt1 = (sizey - self.location[1] - self.radius)/self.velocity[1]
                 else:
-                    dt1Tmp = math.sqrt((self.velocity[1]/g[1])**2 + 2*ds1/g[1]) - self.velocity[1]/g[1]
+                    dt1Tmp = math.sqrt(max((self.velocity[1]/g[1])**2 + 2*ds1/g[1], 0)) - self.velocity[1]/g[1]
                     if dt1Tmp >= 0 and dt1Tmp < dty:
                         dt1 = dt1Tmp
                     else:
-                        dt1 = - math.sqrt((self.velocity[1]/g[1])**2 + 2*ds1/g[1]) - self.velocity[1]/g[1]
+                        dt1 = - math.sqrt(max((self.velocity[1]/g[1])**2 + 2*ds1/g[1], 0)) - self.velocity[1]/g[1]
                 self.velocity[1] = -(self.velocity[1] + g[1]*dt1)
                 self.location[1] = sizey - self.radius
                 dty -= dt1
@@ -33,11 +33,11 @@ class Ball():
                 if g[1] == 0:
                     dt1 = (self.location[1] - self.radius)/self.velocity[1]
                 else:
-                    dt1Tmp = math.sqrt((self.velocity[1]/g[1])**2 + 2*ds1/g[1]) - self.velocity[1]/g[1]
+                    dt1Tmp = math.sqrt(max((self.velocity[1]/g[1])**2 + 2*ds1/g[1], 0)) - self.velocity[1]/g[1]
                     if dt1Tmp >= 0 and dt1Tmp < dty:
                         dt1 =  dt1Tmp
                     else:
-                        dt1 = - math.sqrt((self.velocity[1]/g[1])**2 + 2*ds1/g[1]) - self.velocity[1]/g[1]
+                        dt1 = - math.sqrt(max((self.velocity[1]/g[1])**2 + 2*ds1/g[1], 0)) - self.velocity[1]/g[1]
                 self.velocity[1] = -(self.velocity[1] + g[1]*dt1)
                 self.location[1] = self.radius
                 dty -= dt1
