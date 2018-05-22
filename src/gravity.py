@@ -27,6 +27,7 @@ def run_game():
     # textpos = text.get_rect(centerx=screen.get_width()/2)
     # g =  [1000, 5000] # 加速度
     G = 9.8
+    updateTime = 0.001
     # clock = pygame.time.Clock()
     t1 = time.time() # 
     t2 = t1
@@ -46,16 +47,17 @@ def run_game():
 
         # circlePosY = round(circlePosY + (t2 - t1) * velocity)
         t2 = time.time()
-        dt = t2 - t1
         surface1.fill(ai_settings.bg_color) # fill color
         # dis = math.sqrt((ball0.location[0] - ball1.location[0])**2 + (ball0.location[1] - ball1.location[1])**2)
         # gscale = G*ball0.mass*ball1.mass/dis**2
         # g1 = [gscale*(ball1.location[0] - ball0.location[0])/dis, gscale*(ball1.location[1] - ball0.location[1])/dis]
         # print(g1)
-        ball0.updateGravity(surface1, dt, [ball1,], G)
-        ball2.updateGravity(surface1, dt, [ball1,], G)
-        ball1.update(surface1, (0, 0), dt)
-        t1 = t2 
+
+        while t2 - t1 > updateTime:
+            ball0.updateGravity(surface1, updateTime, [ball1,], G)
+            ball2.updateGravity(surface1, updateTime, [ball1,], G)
+            ball1.update(surface1, (0, 0), updateTime)
+            t1 += updateTime
         # velocity = velocity + g * (t2 - t1)
         # print(pygame.TIMER_RESOLUTION)
 
