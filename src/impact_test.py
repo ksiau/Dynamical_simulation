@@ -81,9 +81,6 @@ def updateImpact(totalballs, resolution, k, LocationTable, dt):
             if x - 1 > 0 and y + 1 < k:
                 for eachBall in LocationTable[x - 1][y + 1]:
                     balls.append(eachBall)
-            if x + 1 < k and y - 1 > 0:
-                for eachBall in LocationTable[x + 1][y - 1]:
-                    balls.append(eachBall)
             num2 = len(balls)
             for i in range(num1):
                 ball1 = balls[i]
@@ -194,6 +191,9 @@ def run_game():
 
         # screen.blit(text, textpos) 
         # rect.blitme()
+        for eachBall in balls:
+            location = [int(eachBall.location[0]), int(eachBall.location[1])]
+            pygame.draw.circle(surface1, eachBall.color, location, eachBall.radius)
         # visualiaze the window
         ## resize the resolution into the window
         pygame.transform.scale(surface1, ai_settings.display, screen)
