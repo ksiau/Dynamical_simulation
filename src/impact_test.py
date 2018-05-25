@@ -52,7 +52,7 @@ def updateImpact(totalballs, resolution, k, LocationTable, dt, g=[0, 0]):
                     ball2 = balls[j]
                     if  ball2.isImpact == 1:
                         continue
-                    isImpact = impact2Ball(ball1, ball2, dt, g, e=1)
+                    isImpact = impact2Ball(ball1, ball2, dt, g, e=0.9)
                     ball1.isImpact, ball2.isImpact = isImpact, isImpact
 
     # t3 = time.time()
@@ -78,7 +78,7 @@ def run_game():
     # clock = pygame.time.Clock()
     t1 = time.time() # 
 
-    balls = generateRandomBalls(160, -100, 100, 30, ai_settings.resolution)
+    balls = generateRandomBalls(120, -300, 300, 30, ai_settings.resolution)
     # balls = [ ball.Ball(100, [-200, 0], [2400, 1000], [0, 0, 255], 20),
     #           ball.Ball(40, [ 200, 0], [ 800, 1000], [0, 255, 0], 1),]
     k = 40
@@ -88,7 +88,7 @@ def run_game():
         # clock.tick(30)
         # supervise keyboard and mouse item
         # print(t2,velocity)
-        # tic = time.time() 
+        tic = time.time() 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -105,6 +105,7 @@ def run_game():
             #     if eachBall.isImpact == 1:
             #         print("got you")
             # print(LocationTable)
+
             for eachBall in balls:
                 if eachBall.isImpact == 0:
                     eachBall.update(surface1, g, updateTime)
@@ -128,8 +129,8 @@ def run_game():
         ## resize the resolution into the window
         pygame.transform.scale(surface1, ai_settings.display, screen)
         pygame.display.flip()
-        # toc = time.time() 
-        # print((t2 - t1), toc - tic)
+        toc = time.time() 
+        # print(toc - tic)
 
 if __name__ == '__main__':
     run_game()

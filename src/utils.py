@@ -8,7 +8,7 @@ def impact2Ball(ball1, ball2, dt, g=[0, 0], e=1):
     v2 = (ball1.velocity[0] - ball2.velocity[0], ball1.velocity[1] - ball2.velocity[1])
     dis = math.sqrt(v1[0]**2 + v1[1]**2)
     velocity = math.sqrt(v2[0]**2 + v2[1]**2)
-    if velocity == 0: return 0
+    if velocity <= 0.0: return 0
     cs = (v1[0]*v2[0] + v1[1]*v2[1])/dis/velocity
     if cs >= 0: return 0
     s1 = math.sqrt(1 - min(1, cs**2))*dis
