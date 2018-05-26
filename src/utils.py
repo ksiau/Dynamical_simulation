@@ -3,6 +3,10 @@ from random import random
 import ball
 
 
+## Calculate impact of two balls within dt.
+## Return 1 if imapcted. Return 0 if not. 
+
+
 def impact2Ball(ball1, ball2, dt, g=[0, 0], e=1):
     v1  = (ball1.location[0] - ball2.location[0], ball1.location[1] - ball2.location[1])
     v2 = (ball1.velocity[0] - ball2.velocity[0], ball1.velocity[1] - ball2.velocity[1])
@@ -54,4 +58,61 @@ def generateRandomBalls(num, maxv, minv, radius, resolution):
             vy = minv + (maxv - minv)*random()
             balls.append(ball.Ball(radius, [vx, vy], location, [255*random(), 255*random(), 255*random()]))
             break
+<<<<<<< HEAD
     return balls
+=======
+    return balls
+
+
+## detect all the  balls in the same canvas, and update their states.
+
+def detectAllImpactAndUpdate(totalballs, resolution, k, LocationTable, dt, g=[0, 0]):
+
+    for x in range(k):
+        for y in range(k):
+            balls = []
+            for eachBall in LocationTable[x][y]:
+                balls.append(eachBall)
+            num1 = len(balls)
+            if x + 1 < k:
+                for eachBall in LocationTable[x + 1][y]:
+                    balls.append(eachBall)
+            if y + 1 < k:
+                for eachBall in LocationTable[x][y + 1]:
+                    balls.append(eachBall)
+            if x + 1 < k and y + 1 < k:
+                for eachBall in LocationTable[x + 1][y + 1]:
+                    balls.append(eachBall)
+            if x - 1 > 0 and y + 1 < k:
+                for eachBall in LocationTable[x - 1][y + 1]:
+                    balls.append(eachBall)
+            num2 = len(balls)
+            for i in range(num1):
+                ball1 = balls[i]
+                if ball1.isImpact == 1: continue
+                for j in range(i + 1, num2):
+                    ball2 = balls[j]
+                    if  ball2.isImpact == 1:
+                        continue
+                    isImpact = impact2Ball(ball1, ball2, dt, g, e=0.9)
+                    ball1.isImpact, ball2.isImpact = isImpact, isImpact
+
+    return LocationTable 
+
+
+## create a table lists all the balls in the list. 
+
+def createLocationTable(balls, resolution, k):
+    LocationTable = []
+    for x in range(k):
+        pX = []
+        for y in range(k):
+            pX.append([])
+        LocationTable.append(pX)
+    width, height = resolution[0]/k, resolution[1]/k
+    for eachBall in balls:
+        # print(eachBall.location[0], eachBall.location[1])
+        LocationTable[int(eachBall.location[0]/width)][int(eachBall.location[1]/height)].append(eachBall)
+        eachBall.isImpact = 0
+    return LocationTable
+>>>>>>> upstream/hyl_temp
