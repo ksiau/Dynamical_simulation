@@ -23,7 +23,7 @@ def gui():
 	# 	label = eval(labelName)
 	# 	label = tk.Label(window, text=labelName)
 
-	gravityLabel = tk.Label(window, text="重力加速度[x y]:").grid(row=0)
+	gravityLabel = tk.Label(window, text="重力加速度[x y]:")
 	ballNumLabel = tk.Label(window, text="小球个数:")
 	radiusLabel = tk.Label(window, text="小球半径:")
 	locationLabel = tk.Label(window, text="小球初始位置:")
