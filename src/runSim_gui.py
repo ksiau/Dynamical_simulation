@@ -5,11 +5,32 @@ import time, math
 import ball
 
 from settings import Settings
+from gui import gui
+from random import random
+
+def generateBalls(num, maxv, minv, radius, initLocation, resolution):
+    if num != len(radius):
+        raise Exception('Wrong match of ball number and radius number')
+    balls = []
+    for i in range(num):
+        while 1:
+            # location = [resolution[0]*random(), resolution[1]*random()]
+            # if location[0] + radius > resolution[0] or location[0] - radius < 0 \
+            #     or location[1] + radius > resolution[1] or location[1] - radius < 0: continue
+            # sig = 0
+            # for eachBall in balls:
+            #     if math.sqrt((location[0] - eachBall.location[0])**2 + (location[1] - eachBall.location[1])**2) - radius - eachBall.radius < 0: 
+            #         sig = 1
+            #         break
+            # if sig == 1: continue
+            vx = minv + (maxv - minv)*random()
+            vy = minv + (maxv - minv)*random()
+            balls.append(ball.Ball(radius[i], [vx, vy], initLocation[i], [255*random(), 255*random(), 255*random()]))
+            break
+    return balls
 
 
-
-
-def run_game():
+def run_game(g,ballNum, radius, initLocation):
     # Initialize pygame, settings, and screen object.
     pygame.init()
     ai_settings = Settings()
@@ -19,13 +40,14 @@ def run_game():
     # font = pygame.font.Font(None, 36)
     # text = font.render("Now create your world", 1, (10, 10, 10))
     # textpos = text.get_rect(centerx=screen.get_width()/2)
-    g =  [0, 5000] # 加速度
+    # g =  [0, 5000] # 加速度
     # clock = pygame.time.Clock()
     t1 = time.time() # 
     t2 = t1
-    ball0 = ball.Ball(400, [600, -1500], [300, 900], [0, 0, 255])
-    ball1 = ball.Ball(40, [-1000, 0], [600, 300], [0, 255, 0])
-    ball2 = ball.Ball(40, [1500, -2500], [900, 600], [255, 0, 0])
+    # ball0 = ball.Ball(400, [600, -1500], [300, 900], [0, 0, 255])
+    # ball1 = ball.Ball(40, [-1000, 0], [600, 300], [0, 255, 0])
+    # ball2 = ball.Ball(40, [1500, -2500], [900, 600], [255, 0, 0])
+    balls = generateBalls(ballNum, -500, 500, radius, initLocation, ai_settings.resolution)
     while True:
         # clock.tick(30)
         # supervise keyboard and mouse item
@@ -38,9 +60,11 @@ def run_game():
         t2 = time.time()
         dt = t2 - t1
         surface1.fill(ai_settings.bg_color) # fill color
-        ball2.update(surface1, g, dt)
-        ball1.update(surface1, g, dt)
-        ball0.update(surface1, g, dt)
+        for ball in balls:
+            ball.update(surface1, g, dt)
+        # ball2.update(surface1, g, dt)
+        # ball1.update(surface1, g, dt)
+        # ball0.update(surface1, g, dt)
         t1 = t2 
         # print(pygame.TIMER_RESOLUTION)
 
@@ -57,38 +81,7 @@ def run_game():
         # print((t2 - t1), toc - tic)
 
 
-    #############
-    # # Make the Play button.
-    # play_button = Button(ai_settings, screen, "Play")
-    
-    # # Create an instance to store game statistics, and a scoreboard.
-    # stats = GameStats(ai_settings)
-    # sb = Scoreboard(ai_settings, screen, stats)
-    
-    
-    # # Make a ship, a group of bullets, and a group of aliens.
-    # ship = Ship(ai_settings, screen)
-    # bullets = Group()
-    # aliens = Group()
-    
-    # # Create the fleet of aliens.
-    # gf.create_fleet(ai_settings, screen, ship, aliens)
-
-    # # Start the main loop for the game.
-    # while True:
-    #     gf.check_events(ai_settings, screen, stats, sb, play_button, ship,
-    #         aliens, bullets)
-        
-    #     if stats.game_active:
-    #         ship.update()
-    #         gf.update_bullets(ai_settings, screen, stats, sb, ship, aliens,
-    #             bullets)
-    #         gf.update_aliens(ai_settings, screen, stats, sb, ship, aliens,
-    #             bullets)
-        
-    #     gf.update_screen(ai_settings, screen, stats, sb, ship, aliens,
-    #         bullets, play_button)
-
-
 if __name__ == '__main__':
-    run_game()
+    g, ballNum, radius, initLocation = gui()
+    # print(g,type(g))
+    run_game(g, ballNum, radius, initLocation)
