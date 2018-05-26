@@ -1,10 +1,9 @@
 import pygame
-# from pygame.sprite import Group
 import sys
 import time, math
 import ball
 from settings import Settings
-from utils import impact2Ball, generateRandomBalls
+from utils import generateRandomBalls, detectAllImpactAndUpdate, createLocationTable
 
 # import game_functions as gf
 
@@ -61,12 +60,6 @@ def updateImpact(totalballs, resolution, k, LocationTable, dt, g=[0, 0]):
 
 
 
-=======
-from settings import Settings
-from utils import generateRandomBalls, detectAllImpactAndUpdate, createLocationTable
-
-
->>>>>>> upstream/hyl_temp
 def run_game():
     # Initialize pygame, settings, and screen object.
     pygame.init()
@@ -88,11 +81,7 @@ def run_game():
     # balls = [ ball.Ball(100, [-200, 0], [2400, 1000], [0, 0, 255], 20),
     #           ball.Ball(40, [ 200, 0], [ 800, 1000], [0, 255, 0], 1),]
     k = 40
-<<<<<<< HEAD
-    LocationTable = setBallLocation(balls, ai_settings.resolution, k)
-=======
     LocationTable = createLocationTable(balls, ai_settings.resolution, k)
->>>>>>> upstream/hyl_temp
     
     while True:
         # clock.tick(30)
@@ -108,12 +97,7 @@ def run_game():
         surface1.fill(ai_settings.bg_color) # fill color
 
         while t2 - t1 > updateTime:
-            # tt1 = time.time()
-<<<<<<< HEAD
-            updateImpact(balls, ai_settings.resolution, k, LocationTable, updateTime, g)
-=======
             detectAllImpactAndUpdate(balls, ai_settings.resolution, k, LocationTable, updateTime, g)
->>>>>>> upstream/hyl_temp
             # tt2 = time.time()
             # for eachBall in balls:
             #     if eachBall.isImpact == 1:
@@ -124,23 +108,13 @@ def run_game():
                 if eachBall.isImpact == 0:
                     eachBall.update(surface1, g, updateTime)
 
-<<<<<<< HEAD
-            LocationTable = setBallLocation(balls, ai_settings.resolution, k)
-=======
             LocationTable = createLocationTable(balls, ai_settings.resolution, k)
->>>>>>> upstream/hyl_temp
             # tt3 = time.time()
             # print((tt3 - tt2)/(tt2 - tt1))
             t1 += updateTime
             # if (int(t1/updateTime) % 200 == 0):
             #     balls.append(ball.Ball(40, [ 200, 0], [ 800, 1000], [0, 255, 0], 1))
-<<<<<<< HEAD
-        
-        # velocity = velocity + g * (t2 - t1)
-        # print(pygame.TIMER_RESOLUTION)
-=======
- 
->>>>>>> upstream/hyl_temp
+
 
         # screen.blit(text, textpos) 
         # rect.blitme()

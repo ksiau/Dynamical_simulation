@@ -2,10 +2,8 @@ import math
 from random import random
 import ball
 
-
 ## Calculate impact of two balls within dt.
 ## Return 1 if imapcted. Return 0 if not. 
-
 
 def impact2Ball(ball1, ball2, dt, g=[0, 0], e=1):
     v1  = (ball1.location[0] - ball2.location[0], ball1.location[1] - ball2.location[1])
@@ -58,9 +56,6 @@ def generateRandomBalls(num, maxv, minv, radius, resolution):
             vy = minv + (maxv - minv)*random()
             balls.append(ball.Ball(radius, [vx, vy], location, [255*random(), 255*random(), 255*random()]))
             break
-<<<<<<< HEAD
-    return balls
-=======
     return balls
 
 
@@ -115,4 +110,3 @@ def createLocationTable(balls, resolution, k):
         LocationTable[int(eachBall.location[0]/width)][int(eachBall.location[1]/height)].append(eachBall)
         eachBall.isImpact = 0
     return LocationTable
->>>>>>> upstream/hyl_temp
