@@ -60,8 +60,8 @@ def run_game(g,ballNum, radius, initLocation):
         t2 = time.time()
         dt = t2 - t1
         surface1.fill(ai_settings.bg_color) # fill color
-        for ball in balls:
-            ball.update(surface1, g, dt)
+        for eachBall in balls:
+            eachBall.update(surface1, g, dt)
         # ball2.update(surface1, g, dt)
         # ball1.update(surface1, g, dt)
         # ball0.update(surface1, g, dt)
@@ -72,6 +72,10 @@ def run_game(g,ballNum, radius, initLocation):
         # rect.blitme()
         # visualiaze the window
         ## resize the resolution into the window
+        for eachBall in balls:
+            location = [int(eachBall.location[0]), int(eachBall.location[1])]
+            pygame.draw.circle(surface1, eachBall.color, location, eachBall.radius)
+ 
         pygame.transform.scale(surface1, ai_settings.display, screen)
         # screen.blit(surface2, ( (screen.get_size()[0] - surface2.get_size()[0])/2,
         #                         (screen.get_size()[1] - surface2.get_size()[1])/2)) # Blit main surface on center of display

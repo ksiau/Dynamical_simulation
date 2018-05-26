@@ -1,64 +1,8 @@
 import pygame
-# from pygame.sprite import Group
 import sys
 import time, math
-import ball
 from settings import Settings
-from utils import impact2Ball, generateRandomBalls
-
-# import game_functions as gf
-
-
-
-def setBallLocation(balls, resolution, k):
-    LocationTable = []
-    for x in range(k):
-        pX = []
-        for y in range(k):
-            pX.append([])
-        LocationTable.append(pX)
-    width, height = resolution[0]/k, resolution[1]/k
-    for eachBall in balls:
-        # print(eachBall.location[0], eachBall.location[1])
-        LocationTable[int(eachBall.location[0]/width)][int(eachBall.location[1]/height)].append(eachBall)
-        eachBall.isImpact = 0
-    return LocationTable
-
-def updateImpact(totalballs, resolution, k, LocationTable, dt, g=[0, 0]):
-    # t1 = time.time()
-    for x in range(k):
-        for y in range(k):
-            balls = []
-            for eachBall in LocationTable[x][y]:
-                balls.append(eachBall)
-            num1 = len(balls)
-            if x + 1 < k:
-                for eachBall in LocationTable[x + 1][y]:
-                    balls.append(eachBall)
-            if y + 1 < k:
-                for eachBall in LocationTable[x][y + 1]:
-                    balls.append(eachBall)
-            if x + 1 < k and y + 1 < k:
-                for eachBall in LocationTable[x + 1][y + 1]:
-                    balls.append(eachBall)
-            if x - 1 > 0 and y + 1 < k:
-                for eachBall in LocationTable[x - 1][y + 1]:
-                    balls.append(eachBall)
-            num2 = len(balls)
-            for i in range(num1):
-                ball1 = balls[i]
-                if ball1.isImpact == 1: continue
-                for j in range(i + 1, num2):
-                    ball2 = balls[j]
-                    if  ball2.isImpact == 1:
-                        continue
-                    isImpact = impact2Ball(ball1, ball2, dt, g, e=0.9)
-                    ball1.isImpact, ball2.isImpact = isImpact, isImpact
-
-    # t3 = time.time()
-    # print((t3 - t2)/(t2 - t1))
-    return LocationTable 
-
+from utils import generateRandomBalls, detectAllImpactAndUpdate, createLocationTable
 
 
 def run_game():
@@ -82,7 +26,7 @@ def run_game():
     # balls = [ ball.Ball(100, [-200, 0], [2400, 1000], [0, 0, 255], 20),
     #           ball.Ball(40, [ 200, 0], [ 800, 1000], [0, 255, 0], 1),]
     k = 40
-    LocationTable = setBallLocation(balls, ai_settings.resolution, k)
+    LocationTable = createLocationTable(balls, ai_settings.resolution, k)
     
     while True:
         # clock.tick(30)
@@ -99,7 +43,7 @@ def run_game():
 
         while t2 - t1 > updateTime:
             # tt1 = time.time()
-            updateImpact(balls, ai_settings.resolution, k, LocationTable, updateTime, g)
+            detectAllImpactAndUpdate(balls, ai_settings.resolution, k, LocationTable, updateTime, g)
             # tt2 = time.time()
             # for eachBall in balls:
             #     if eachBall.isImpact == 1:
@@ -110,15 +54,13 @@ def run_game():
                 if eachBall.isImpact == 0:
                     eachBall.update(surface1, g, updateTime)
 
-            LocationTable = setBallLocation(balls, ai_settings.resolution, k)
+            LocationTable = createLocationTable(balls, ai_settings.resolution, k)
             # tt3 = time.time()
             # print((tt3 - tt2)/(tt2 - tt1))
             t1 += updateTime
             # if (int(t1/updateTime) % 200 == 0):
             #     balls.append(ball.Ball(40, [ 200, 0], [ 800, 1000], [0, 255, 0], 1))
-        
-        # velocity = velocity + g * (t2 - t1)
-        # print(pygame.TIMER_RESOLUTION)
+ 
 
         # screen.blit(text, textpos) 
         # rect.blitme()
