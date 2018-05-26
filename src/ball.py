@@ -19,11 +19,11 @@ class Ball():
                 if g[1] == 0:
                     dt1 = (sizey - self.location[1] - self.radius)/self.velocity[1]
                 else:
-                    dt1Tmp = math.sqrt((self.velocity[1]/g[1])**2 + 2*ds1/g[1]) - self.velocity[1]/g[1]
+                    dt1Tmp = math.sqrt(max((self.velocity[1]/g[1])**2 + 2*ds1/g[1], 0)) - self.velocity[1]/g[1]
                     if dt1Tmp >= 0 and dt1Tmp < dty:
                         dt1 = dt1Tmp
                     else:
-                        dt1 = - math.sqrt((self.velocity[1]/g[1])**2 + 2*ds1/g[1]) - self.velocity[1]/g[1]
+                        dt1 = - math.sqrt(max((self.velocity[1]/g[1])**2 + 2*ds1/g[1], 0)) - self.velocity[1]/g[1]
                 self.velocity[1] = -(self.velocity[1] + g[1]*dt1)
                 self.location[1] = sizey - self.radius
                 dty -= dt1
@@ -33,11 +33,11 @@ class Ball():
                 if g[1] == 0:
                     dt1 = (self.location[1] - self.radius)/self.velocity[1]
                 else:
-                    dt1Tmp = math.sqrt((self.velocity[1]/g[1])**2 + 2*ds1/g[1]) - self.velocity[1]/g[1]
+                    dt1Tmp = math.sqrt(max((self.velocity[1]/g[1])**2 + 2*ds1/g[1], 0)) - self.velocity[1]/g[1]
                     if dt1Tmp >= 0 and dt1Tmp < dty:
                         dt1 =  dt1Tmp
                     else:
-                        dt1 = - math.sqrt((self.velocity[1]/g[1])**2 + 2*ds1/g[1]) - self.velocity[1]/g[1]
+                        dt1 = - math.sqrt(max((self.velocity[1]/g[1])**2 + 2*ds1/g[1], 0)) - self.velocity[1]/g[1]
                 self.velocity[1] = -(self.velocity[1] + g[1]*dt1)
                 self.location[1] = self.radius
                 dty -= dt1
@@ -84,8 +84,8 @@ class Ball():
         self.location[0] = self.location[0] + ds
         self.velocity[0] = self.velocity[0] + g[0] * dtx
 
-        location = [round(self.location[0]), round(self.location[1])]
-        pygame.draw.circle(surface, self.color, location, self.radius)
+        # location = [round(self.location[0]), round(self.location[1])]
+        # pygame.draw.circle(surface, self.color, location, self.radius)
 
 
     def getGravityEnergy(self, masses, G):
@@ -102,6 +102,7 @@ class Ball():
         dty = dt
         g = [0, 0]
 
+        # calculate total g
         for mass in masses:
             dis = math.sqrt((self.location[0] - mass.location[0])**2 + (self.location[1] - mass.location[1])**2)
             gscale = G*self.mass*mass.mass/dis**2
@@ -110,6 +111,7 @@ class Ball():
             g[1] += g1[1]
 
         
+        # update location
         ds = self.velocity[1]*dty + 1/2*g[1]*dty**2
 
         self.location[1] = self.location[1] + ds
@@ -119,20 +121,12 @@ class Ball():
         self.location[0] = self.location[0] + ds
         self.velocity[0] = self.velocity[0] + dt*g[0]
 
+        # midify velocity, according to energe
         energy = self.energy
         for mass in masses:
             dis = math.sqrt((self.location[0] - mass.location[0])**2 + (self.location[1] - mass.location[1])**2) 
             energy -= -G*self.mass*mass.mass/dis
 
-
-        ds = self.velocity[1]*dty + 1/2*g[1]*dty**2
-
-        self.location[1] = self.location[1] + ds
-        self.velocity[1] = self.velocity[1] + dt*g[1]
-        dtx = dt
-        ds = self.velocity[0]*dtx + 1/2*g[0]*dtx**2
-        self.location[0] = self.location[0] + ds
-        self.velocity[0] = self.velocity[0] + dt*g[0]
         if energy > 0:
             svelocity = math.sqrt(2*energy/self.mass)
             curentVelocity = math.sqrt(self.velocity[0]**2 + self.velocity[1]**2)
@@ -142,6 +136,6 @@ class Ball():
                 scale = svelocity/curentVelocity
                 self.velocity = [self.velocity[0]*scale, self.velocity[1]*scale]
 
-        location = [round(self.location[0]), round(self.location[1])]
-        pygame.draw.circle(surface, self.color, location, self.radius)
+        # location = [round(self.location[0]), round(self.location[1])]
+        # pygame.draw.circle(surface, self.color, location, self.radius)
         # print(g, self.velocity)
