@@ -19,19 +19,20 @@ def run_game():
     # font = pygame.font.Font(None, 36)
     # text = font.render("Now create your world", 1, (10, 10, 10))
     # textpos = text.get_rect(centerx=screen.get_width()/2)
-    g =  [0, 5000] # 加速度
+    g =  [0, 1000] # 加速度
     # clock = pygame.time.Clock()
     t1 = time.time() # 
     t2 = t1
-    ball0 = ball.Ball(400, [600, -1500], [300, 900], [0, 0, 255])
-    ball1 = ball.Ball(40, [-1000, 0], [600, 300], [0, 255, 0])
-    ball2 = ball.Ball(40, [1500, -2500], [900, 600], [255, 0, 0])
-    balls = [ball0, ball1, ball2]
+    ball0 = ball.Ball(100, [1300, 2000], [1000, 2000], [0, 0, 255])
+    # ball1 = ball.Ball(40, [-1000, 0], [600, 300], [0, 255, 0])
+    # ball2 = ball.Ball(40, [1500, -2500], [900, 600], [255, 0, 0])
+    balls = [ball0]
     while True:
         # clock.tick(30)
         # supervise keyboard and mouse item
         # print(t2,velocity)
         # tic = time.time()
+        print(ball0.velocity)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -41,9 +42,9 @@ def run_game():
         surface1.fill(ai_settings.bg_color) # fill color
 
         ## update states of balls in dt.
-        ball2.update(surface1, g, dt)
-        ball1.update(surface1, g, dt)
-        ball0.update(surface1, g, dt)
+        # ball2.update(surface1, g, dt, f=0.1, e=0.9)
+        # ball1.update(surface1, g, dt, f=0.1, e=0.9)
+        ball0.update(surface1, g, dt, f=0.01, e=0.9)
         t1 = t2 
         # print(pygame.TIMER_RESOLUTION)
 

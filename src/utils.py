@@ -5,7 +5,7 @@ import ball
 ## Calculate impact of two balls within dt.
 ## Return 1 if imapcted. Return 0 if not. 
 
-def impact2Ball(ball1, ball2, dt, g=[0, 0], e=1):
+def impact2Ball(ball1, ball2, dt, g=[0, 0], e=1, f=0):
     v1  = (ball1.location[0] - ball2.location[0], ball1.location[1] - ball2.location[1])
     v2 = (ball1.velocity[0] - ball2.velocity[0], ball1.velocity[1] - ball2.velocity[1])
     dis = math.sqrt(v1[0]**2 + v1[1]**2)
@@ -26,13 +26,25 @@ def impact2Ball(ball1, ball2, dt, g=[0, 0], e=1):
     v1  = (ball1.location[0] - ball2.location[0], ball1.location[1] - ball2.location[1])
     dis = math.sqrt(v1[0]**2 + v1[1]**2)
     # print
-    dvscale = (v1[0]*v2[0] + v1[1]*v2[1])/dis
-    dv = (-dvscale*v1[0]/dis, -dvscale*v1[1]/dis)
-    ball1.velocity[0] = (ball1.velocity[0] + dv[0]*2*(ball2.mass/(ball1.mass + ball2.mass)))*e + dt*g[0]
-    ball1.velocity[1] = (ball1.velocity[1] + dv[1]*2*(ball2.mass/(ball1.mass + ball2.mass)))*e + dt*g[1]
-    ball2.velocity[0] = (ball2.velocity[0] - dv[0]*2*(ball1.mass/(ball1.mass + ball2.mass)))*e + dt*g[0]
-    ball2.velocity[1] = (ball2.velocity[1] - dv[1]*2*(ball1.mass/(ball1.mass + ball2.mass)))*e + dt*g[1]
-    ball1.velocity[0] += ball1.velocity[0]*dt2
+    vscale = abs(v1[0]*v2[0] + v1[1]*v2[1])/dis
+    v = (-vscale*v1[0]/dis, -vscale*v1[1]/dis)
+    ball1.velocity[0] = ball1.velocity[0] - (v[0]*2*(ball2.mass/(ball1.mass + ball2.mass)))*e + dt*g[0]
+    ball1.velocity[1] = ball1.velocity[1] - (v[1]*2*(ball2.mass/(ball1.mass + ball2.mass)))*e + dt*g[1]
+    ball2.velocity[0] = ball2.velocity[0] + (v[0]*2*(ball1.mass/(ball1.mass + ball2.mass)))*e + dt*g[0]
+    ball2.velocity[1] = ball2.velocity[1] + (v[1]*2*(ball1.mass/(ball1.mass + ball2.mass)))*e + dt*g[1]
+    ## Tangential spe
+    vt = [v2[0] - v[0], v2[1] - v[1]]
+    vtscale = math.sqrt(vt[0]**2 + vt[1]**2)
+    if vtscale > 0:
+        dvtscale = vtscale - max(0, vtscale - abs(vscale)*f*2)
+        print(vtscale, dvtscale)
+        dvt = (dvtscale/vtscale*vt[0], dvtscale/vtscale*vt[1])
+        # dvt = vt
+        ball1.velocity[0] = ball1.velocity[0] - (dvt[0]*(ball2.mass/(ball1.mass + ball2.mass)))*e
+        ball1.velocity[1] = ball1.velocity[1] - (dvt[1]*(ball2.mass/(ball1.mass + ball2.mass)))*e
+        ball2.velocity[0] = ball2.velocity[0] + (dvt[0]*(ball1.mass/(ball1.mass + ball2.mass)))*e
+        ball2.velocity[1] = ball2.velocity[1] + (dvt[1]*(ball1.mass/(ball1.mass + ball2.mass)))*e
+    ball1.location[0] += ball1.velocity[0]*dt2
     ball1.location[1] += ball1.velocity[1]*dt2
     ball2.location[0] += ball2.velocity[0]*dt2
     ball2.location[1] += ball2.velocity[1]*dt2
@@ -61,7 +73,7 @@ def generateRandomBalls(num, maxv, minv, radius, resolution):
 
 ## detect all the  balls in the same canvas, and update their states.
 
-def detectAllImpactAndUpdate(totalballs, resolution, k, LocationTable, dt, g=[0, 0]):
+def detectAllImpactAndUpdate(totalballs, resolution, k, LocationTable, dt, g=[0, 0], e=1, f=0):
 
     for x in range(k):
         for y in range(k):
@@ -89,7 +101,7 @@ def detectAllImpactAndUpdate(totalballs, resolution, k, LocationTable, dt, g=[0,
                     ball2 = balls[j]
                     if  ball2.isImpact == 1:
                         continue
-                    isImpact = impact2Ball(ball1, ball2, dt, g, e=0.9)
+                    isImpact = impact2Ball(ball1, ball2, dt, g, e=e, f=f)
                     ball1.isImpact, ball2.isImpact = isImpact, isImpact
 
     return LocationTable 
