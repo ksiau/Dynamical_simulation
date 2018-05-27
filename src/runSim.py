@@ -3,7 +3,7 @@ import pygame
 import sys
 import time, math
 import ball
-
+from utils import generateRandomBalls, detectAllImpactAndUpdate, createLocationTable
 from settings import Settings
 
 
@@ -23,29 +23,44 @@ def run_game():
     # clock = pygame.time.Clock()
     t1 = time.time() # 
     t2 = t1
-    ball0 = ball.Ball(100, [1300, 2000], [1000, 2000], [0, 0, 255])
+    ball0 = ball.Ball(100, [00, 00], [1800, ai_settings.resolution[1] - 100], [0, 0, 255])
+    ball1 = ball.Ball(100, [800, 300], [400, ai_settings.resolution[1] - 2000], [0, 255, 255])
     # ball1 = ball.Ball(40, [-1000, 0], [600, 300], [0, 255, 0])
     # ball2 = ball.Ball(40, [1500, -2500], [900, 600], [255, 0, 0])
-    balls = [ball0]
+    balls = [ball0, ball1]
+    updateTime = 0.001
+    k = 1
+    LocationTable = createLocationTable(balls, ai_settings.resolution, k)
+    f = 0.1
+    e = 0.9
     while True:
-        # clock.tick(30)
-        # supervise keyboard and mouse item
         # print(t2,velocity)
         # tic = time.time()
-        print(ball0.velocity)
+        # print(ball0.velocity, ball0.state.bits)
+        # print(ball1.velocity, ball1.state.bits)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-
-        t2 = time.time()
-        dt = t2 - t1
         surface1.fill(ai_settings.bg_color) # fill color
+        t2 = time.time()
 
-        ## update states of balls in dt.
+        while t2 - t1 > updateTime:
+            detectAllImpactAndUpdate(balls, ai_settings.resolution, k, LocationTable, updateTime, g, e=e, f=f)
+            print(1, ball0.location, ball0.velocity, ball0.isImpact, ball0.state.bits)
+            for eachBall in balls:
+                if eachBall.isImpact == 0:
+                    eachBall.update(surface1, g, updateTime, f=f, e=e)
+
+            # print(2, ball0.location, ball0.velocity, ball0.isImpact, ball0.state.bits)
+            LocationTable = createLocationTable(balls, ai_settings.resolution, k)
+            t1 += updateTime
+            
+
+
+        ## update states of balls in dt. ball0.velocity,
         # ball2.update(surface1, g, dt, f=0.1, e=0.9)
         # ball1.update(surface1, g, dt, f=0.1, e=0.9)
-        ball0.update(surface1, g, dt, f=0.01, e=0.9)
-        t1 = t2 
         # print(pygame.TIMER_RESOLUTION)
 
         
@@ -55,7 +70,6 @@ def run_game():
             pygame.draw.circle(surface1, eachBall.color, location, eachBall.radius)
         
         pygame.transform.scale(surface1, ai_settings.display, screen)
-
         pygame.display.flip()
         # toc = time.time() 
         # print((t2 - t1), toc - tic)

@@ -25,25 +25,30 @@ def impact2Ball(ball1, ball2, dt, g=[0, 0], e=1, f=0):
     dt2 = dt - dt1
     v1  = (ball1.location[0] - ball2.location[0], ball1.location[1] - ball2.location[1])
     dis = math.sqrt(v1[0]**2 + v1[1]**2)
-    # print
+    
+    ## update speed
     vscale = abs(v1[0]*v2[0] + v1[1]*v2[1])/dis
     v = (-vscale*v1[0]/dis, -vscale*v1[1]/dis)
     ball1.velocity[0] = ball1.velocity[0] - (v[0]*2*(ball2.mass/(ball1.mass + ball2.mass)))*e + dt*g[0]
     ball1.velocity[1] = ball1.velocity[1] - (v[1]*2*(ball2.mass/(ball1.mass + ball2.mass)))*e + dt*g[1]
     ball2.velocity[0] = ball2.velocity[0] + (v[0]*2*(ball1.mass/(ball1.mass + ball2.mass)))*e + dt*g[0]
     ball2.velocity[1] = ball2.velocity[1] + (v[1]*2*(ball1.mass/(ball1.mass + ball2.mass)))*e + dt*g[1]
-    ## Tangential spe
+    ## Tangential speed
     vt = [v2[0] - v[0], v2[1] - v[1]]
     vtscale = math.sqrt(vt[0]**2 + vt[1]**2)
     if vtscale > 0:
         dvtscale = vtscale - max(0, vtscale - abs(vscale)*f*2)
-        print(vtscale, dvtscale)
         dvt = (dvtscale/vtscale*vt[0], dvtscale/vtscale*vt[1])
         # dvt = vt
-        ball1.velocity[0] = ball1.velocity[0] - (dvt[0]*(ball2.mass/(ball1.mass + ball2.mass)))*e
-        ball1.velocity[1] = ball1.velocity[1] - (dvt[1]*(ball2.mass/(ball1.mass + ball2.mass)))*e
-        ball2.velocity[0] = ball2.velocity[0] + (dvt[0]*(ball1.mass/(ball1.mass + ball2.mass)))*e
-        ball2.velocity[1] = ball2.velocity[1] + (dvt[1]*(ball1.mass/(ball1.mass + ball2.mass)))*e
+        ball1.velocity[0] = ball1.velocity[0] - (dvt[0]*(ball2.mass/(ball1.mass + ball2.mass)))
+        ball1.velocity[1] = ball1.velocity[1] - (dvt[1]*(ball2.mass/(ball1.mass + ball2.mass)))
+        ball2.velocity[0] = ball2.velocity[0] + (dvt[0]*(ball1.mass/(ball1.mass + ball2.mass)))
+        ball2.velocity[1] = ball2.velocity[1] + (dvt[1]*(ball1.mass/(ball1.mass + ball2.mass)))
+
+    ## after updated speed, update each ball's state
+    ball1.updateState(g)
+    ball2.updateState(g)
+
     ball1.location[0] += ball1.velocity[0]*dt2
     ball1.location[1] += ball1.velocity[1]*dt2
     ball2.location[0] += ball2.velocity[0]*dt2
@@ -118,7 +123,20 @@ def createLocationTable(balls, resolution, k):
         LocationTable.append(pX)
     width, height = resolution[0]/k, resolution[1]/k
     for eachBall in balls:
-        # print(eachBall.location[0], eachBall.location[1])
+        # print(eachBall.location[0], eachBall.location[1], int(eachBall.location[0]/width), int(eachBall.location[1]/height))
         LocationTable[int(eachBall.location[0]/width)][int(eachBall.location[1]/height)].append(eachBall)
         eachBall.isImpact = 0
     return LocationTable
+
+
+class Bit():
+    def __init__(self, num):
+        self.bits = num
+    def getBit(self, n):
+        return ((self.bits >> n & 1) != 0)
+
+    def setBit(self, n):
+        self.bits = self.bits | (1 << n)
+
+    def clearBit(self, n):
+        self.bits = self.bits & ~(1 << n)

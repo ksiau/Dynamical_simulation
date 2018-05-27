@@ -26,15 +26,15 @@ def run_game():
     # text = font.render("Now create your world", 1, (10, 10, 10))
     # textpos = text.get_rect(centerx=screen.get_width()/2)
     g =  [0, 0] # 加速度
-    updateTime = 0.005
+    updateTime = 0.01
     # clock = pygame.time.Clock()
     t1 = time.time() # 
 
-    # balls = generateRandomBalls(100, -300, 300, 40, ai_settings.resolution)
+    balls = generateRandomBalls(100, -300, 300, 40, ai_settings.resolution)
     # balls = [ ball.Ball(100, [-200, 0], [2400, 1000], [0, 0, 255], 20),
     #           ball.Ball(40, [ 200, 0], [ 800, 1000], [0, 255, 0], 1),]
-    balls = [ ball.Ball(60, [-300, 0], [1200, 1000], [0, 0, 255], 1),
-              ball.Ball(60, [ 300, 0], [ 800, 1090], [0, 255, 0], 1),]
+    # balls = [ ball.Ball(60, [-300, 0], [1200, 1000], [0, 0, 255], 1),
+    #           ball.Ball(60, [ 300, 0], [ 800, 1040], [0, 255, 0], 1),]
     k = 5
     LocationTable = createLocationTable(balls, ai_settings.resolution, k)
     
@@ -50,15 +50,9 @@ def run_game():
         # circlePosY = round(circlePosY + (t2 - t1) * velocity)
         t2 = time.time()       
         surface1.fill(ai_settings.bg_color) # fill color
-        print(balls[0].getSpeed(), balls[1].getSpeed(), balls[0].getSpeed()**2 + balls[1].getSpeed()**2)
+        # print(balls[0].getSpeed(), balls[1].getSpeed(), balls[0].getSpeed()**2 + balls[1].getSpeed()**2)
         while t2 - t1 > updateTime:
-            detectAllImpactAndUpdate(balls, ai_settings.resolution, k, LocationTable, updateTime, g, e=1, f=20)
-            # tt2 = time.time()
-            # for eachBall in balls:
-            #     if eachBall.isImpact == 1:
-            #         print("got you")
-            # print(LocationTable)
-
+            detectAllImpactAndUpdate(balls, ai_settings.resolution, k, LocationTable, updateTime, g, e=1, f=0.)
             for eachBall in balls:
                 if eachBall.isImpact == 0:
                     eachBall.update(surface1, g, updateTime)
