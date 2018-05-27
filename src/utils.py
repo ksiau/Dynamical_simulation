@@ -53,14 +53,14 @@ def impact2Ball(ball1, ball2, dt, g=[0, 0], e=1, f=0):
     dt2 = dt - dt1
 
     ## update relative distance
-    v1  = (ball1.location[0] - ball2.location[0], ball1.location[1] - ball2.location[1])
+    v1  = (ball2.location[0] - ball1.location[0], ball2.location[1] - ball1.location[1])
     dis = math.sqrt(v1[0]**2 + v1[1]**2)
     
     ## update speed
     vscale = abs(v1[0]*v2[0] + v1[1]*v2[1])/dis
-    v = (-vscale*v1[0]/dis, -vscale*v1[1]/dis)
-    verticalVball1 = [-(v[0]*2*(ball2.mass/(ball1.mass + ball2.mass)))*e, - (v[1]*2*(ball2.mass/(ball1.mass + ball2.mass)))*e]
-    verticalVball2 = [(v[0]*2*(ball1.mass/(ball1.mass + ball2.mass)))*e, (v[1]*2*(ball1.mass/(ball1.mass + ball2.mass)))*e]
+    v = (vscale*v1[0]/dis, vscale*v1[1]/dis)
+    verticalVball1 = [-(v[0]*2*(ball2.mass/(ball1.mass + ball2.mass)))*e*f, -(v[1]*2*(ball2.mass/(ball1.mass + ball2.mass)))*e*f]
+    verticalVball2 = [ (v[0]*2*(ball1.mass/(ball1.mass + ball2.mass)))*e*f,  (v[1]*2*(ball1.mass/(ball1.mass + ball2.mass)))*e*f]
     verticalSball1 = abs2D(verticalVball1)
     verticalSball2 = abs2D(verticalVball2)
     ball1.velocity[0] = ball1.velocity[0] - (v[0]*2*(ball2.mass/(ball1.mass + ball2.mass)))*e + dt*g[0]
@@ -78,7 +78,7 @@ def impact2Ball(ball1, ball2, dt, g=[0, 0], e=1, f=0):
     relativeTv = [boundvball2[0] - boundvball1[0] - v[0], boundvball2[0] - boundvball1[0] - v[1]]
     relativeTs = abs2D(relativeTv)
     vectorRelativeTv = [relativeTv[0]/relativeTs, relativeTv[1]/relativeTs]
-    if relativeTs > 0:
+    if relativeTs > 0 and f > 0:
         maxChangeTs1 = verticalSball1*(1 + 1//(2/5*ball1.mass))
         maxChangeTs2 = verticalSball2*(1 + 1//(2/5*ball2.mass))
         newRv = max(0, relativeTs - maxChangeTs1 - maxChangeTs2)

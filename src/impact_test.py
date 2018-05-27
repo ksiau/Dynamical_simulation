@@ -52,7 +52,7 @@ def run_game():
         surface1.fill(ai_settings.bg_color) # fill color
         # print(balls[0].getSpeed(), balls[1].getSpeed(), balls[0].getSpeed()**2 + balls[1].getSpeed()**2)
         while t2 - t1 > updateTime:
-            detectAllImpactAndUpdate(balls, ai_settings.resolution, k, LocationTable, updateTime, g, e=1, f=0.)
+            detectAllImpactAndUpdate(balls, ai_settings.resolution, k, LocationTable, updateTime, g, e=1, f=0.01)
             for eachBall in balls:
                 if eachBall.isImpact == 0:
                     eachBall.update(surface1, g, updateTime)
