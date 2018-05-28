@@ -71,8 +71,8 @@ def impact2Ball(ball1, ball2, dt, g=[0, 0], e=1, f=0):
     ## Tangential speed
     ## relative velocity of centers
     
-    angle1 = getAngleByVector([-v1[0], -v1[1]])
-    angle2 = getAngleByVector(v1)
+    angle1 = getAngleByVector(v1)
+    angle2 = getAngleByVector([-v1[0], -v1[1]])
     boundvball1 = ball1.getBoundaryVelocity(angle1)
     boundvball2 = ball2.getBoundaryVelocity(angle2)
     relativeTv = [boundvball2[0] - boundvball1[0] - v[0], boundvball2[0] - boundvball1[0] - v[1]]
@@ -102,7 +102,9 @@ def impact2Ball(ball1, ball2, dt, g=[0, 0], e=1, f=0):
 
         realChangeTvB2F = realChangeTvB2*1/(2/5*ball1.mass)/((1 + 1/(2/5*ball1.mass)))
         momentum = [-vectorRelativeTv[0]*realChangeTvB1F*ball2.mass, -vectorRelativeTv[1]*realChangeTvB1F*ball2.mass]
-        ball2.updateAngVelocity(ball2.getBoundaryPointByAngle(angle1), momentum)
+        ball2.updateAngVelocity(ball2.getBoundaryPointByAngle(angle2), momentum)
+        print(ball2.location, angle2)
+        print(ball1.location, angle1)
 
 
     # vt = [v2[0] - v[0], v2[1] - v[1]]
