@@ -1,5 +1,6 @@
 from random import random
 
+
 # try:
 # 	a=1/0
 # except Exception:

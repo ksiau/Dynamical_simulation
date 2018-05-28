@@ -92,4 +92,5 @@ def gui():
 if __name__ == '__main__':
 	g, ballNum, radius, location = gui()
 	print(location,type(location))
+	
 	# runSim.run_game(g)
