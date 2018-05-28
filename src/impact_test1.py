@@ -1,8 +1,16 @@
 import pygame
 import sys
 import time, math
+import ball
 from settings import Settings
 from utils import generateRandomBalls, detectAllImpactAndUpdate, createLocationTable
+
+# import game_functions as gf
+
+
+
+# def ballDis(b1, b2):
+
 
 
 def run_game():
@@ -18,14 +26,16 @@ def run_game():
     # text = font.render("Now create your world", 1, (10, 10, 10))
     # textpos = text.get_rect(centerx=screen.get_width()/2)
     g =  [0, 0] # 加速度
-    updateTime = 0.005
+    updateTime = 0.01
     # clock = pygame.time.Clock()
     t1 = time.time() # 
 
-    balls = generateRandomBalls(120, -300, 300, 30, ai_settings.resolution)
+    # balls = generateRandomBalls(100, -300, 300, 40, ai_settings.resolution)
     # balls = [ ball.Ball(100, [-200, 0], [2400, 1000], [0, 0, 255], 20),
     #           ball.Ball(40, [ 200, 0], [ 800, 1000], [0, 255, 0], 1),]
-    k = 40
+    balls = [ ball.Ball(120, [-300, 0], [3200, 1000], [0, 0, 255], 1),
+              ball.Ball(120, [ 300, 0], [ 800, 1000 + 180], [0, 255, 0], 1),]
+    k = 5
     LocationTable = createLocationTable(balls, ai_settings.resolution, k)
     
     while True:
@@ -40,19 +50,13 @@ def run_game():
         # circlePosY = round(circlePosY + (t2 - t1) * velocity)
         t2 = time.time()       
         surface1.fill(ai_settings.bg_color) # fill color
-
+        # print(balls[0].getSpeed(), balls[1].getSpeed(), balls[0].getSpeed()**2 + balls[1].getSpeed()**2)
         while t2 - t1 > updateTime:
-            # tt1 = time.time()
-            detectAllImpactAndUpdate(balls, ai_settings.resolution, k, LocationTable, updateTime, g)
-            # tt2 = time.time()
-            # for eachBall in balls:
-            #     if eachBall.isImpact == 1:
-            #         print("got you")
-            # print(LocationTable)
-
+            detectAllImpactAndUpdate(balls, ai_settings.resolution, k, LocationTable, updateTime, g, e=1, f=0.1)
             for eachBall in balls:
                 if eachBall.isImpact == 0:
                     eachBall.update(surface1, g, updateTime)
+                eachBall.updateRadian(updateTime)
 
             LocationTable = createLocationTable(balls, ai_settings.resolution, k)
             # tt3 = time.time()
@@ -60,13 +64,15 @@ def run_game():
             t1 += updateTime
             # if (int(t1/updateTime) % 200 == 0):
             #     balls.append(ball.Ball(40, [ 200, 0], [ 800, 1000], [0, 255, 0], 1))
- 
+
 
         # screen.blit(text, textpos) 
         # rect.blitme()
         for eachBall in balls:
-            location = [int(eachBall.location[0]), int(eachBall.location[1])]
-            pygame.draw.circle(surface1, eachBall.color, location, eachBall.radius)
+            eachBall.draw(surface1)
+
+            # location = [int(eachBall.location[0]), int(eachBall.location[1])]
+            # pygame.draw.circle(surface1, eachBall.color, location, eachBall.radius)
         # visualiaze the window
         ## resize the resolution into the window
         pygame.transform.scale(surface1, ai_settings.display, screen)
